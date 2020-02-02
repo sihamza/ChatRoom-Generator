@@ -5,11 +5,12 @@ var randomstring = require("randomstring");
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
 var moment = require('moment')
-const port = process.env.PORT   ;
+const port = process.env.PORT || 3000  ;
 const history = require('connect-history-api-fallback');
 var compression = require('compression')
 var serveStatic = require('serve-static');
 
+app.use("/", serveStatic("./front-end/dist"));
 
 app.use(cors())
 app.use(compression())
@@ -17,6 +18,8 @@ app.use(history({
   disableDotRule: true,
   verbose: true
 }));
+
+app.get("/", serveStatic("./front-end/dist"));
 
 app.get("/create", ( req , res ) => {
   let room = randomstring.generate(7)
